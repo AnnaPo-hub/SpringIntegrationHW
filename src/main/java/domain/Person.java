@@ -11,6 +11,6 @@ import lombok.Setter;
 @Setter
 public class Person {
     private final String name;
-    boolean manicured = false;
-    boolean withMakeUp = false;
+    boolean notManicured = true;
+    boolean withoutMakeUp = true;
 }
