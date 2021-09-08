@@ -10,6 +10,6 @@ public interface BeautySalon {
     @Gateway(requestChannel = "beautySalonFlow.input", replyChannel = "clientOut")
     Person process(Person person);
 
-//    @Gateway(requestChannel = "clientComing", replyChannel = "clientOut")
-//    Person process(Person person);
+
+
 }

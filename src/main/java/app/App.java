@@ -44,25 +44,20 @@ public class App {
 
     @Bean
     public IntegrationFlow beautySalonFlow() {
-//        return IntegrationFlows.from("clientComing")
         return flow -> flow
-                //.filter(onlyNotManicured())
                 .filter(person -> ((Person) person).isNotManicured())
-                .handle("manicureService", "makeManicure")
+                .gateway(manicureFlow())
                 .filter(person -> ((Person) person).isWithoutMakeUp())
                 .handle("makeUpService", "toDoMakeUp")
                 .channel("clientOut");
-
     }
 
-//    @Bean
-//    public GenericSelector<Person> onlyNotManicured(){
-//        return  new GenericSelector<Person>() {
-//            public boolean accept(Person person) {
-//                return person.isManicured();
-//            }
-//        };
-//    }
+    @Bean
+    public IntegrationFlow manicureFlow() {
+        return flow -> flow
+                .handle("manicureService", "makeManicure")
+                .handle("manicureService", "varnishNails");
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
