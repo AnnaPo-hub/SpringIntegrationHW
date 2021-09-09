@@ -1,7 +1,7 @@
-package ru.otus.SpringIntegrationProject.cabinets;
+package ru.otus.SpringIntegrationProject.service;
 
-import ru.otus.SpringIntegrationProject.domain.Person;
 import org.springframework.stereotype.Service;
+import ru.otus.SpringIntegrationProject.domain.Person;
 
 @Service
 public class MakeUpService {
@@ -9,6 +9,7 @@ public class MakeUpService {
         System.out.println("Doing makeup for " + person.getName());
         person.setWithoutMakeUp(false);
         System.out.println(person.getName() + " got makeup");
+        person.setClientDebt(person.getClientDebt()+100);
         return person;
     }
 }

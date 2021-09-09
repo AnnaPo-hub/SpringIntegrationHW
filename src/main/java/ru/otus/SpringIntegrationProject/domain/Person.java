@@ -13,4 +13,5 @@ public class Person {
     private final String name;
     boolean notManicured;
     boolean withoutMakeUp;
+    int clientDebt;
 }

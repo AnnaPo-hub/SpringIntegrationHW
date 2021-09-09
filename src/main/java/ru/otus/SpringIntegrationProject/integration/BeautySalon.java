@@ -1,13 +1,13 @@
-package ru.otus.SpringIntegrationProject;
+package ru.otus.SpringIntegrationProject.integration;
 
-import ru.otus.SpringIntegrationProject.domain.Person;
 import org.springframework.integration.annotation.Gateway;
 import org.springframework.integration.annotation.MessagingGateway;
+import ru.otus.SpringIntegrationProject.domain.Person;
 
 @MessagingGateway
 public interface BeautySalon {
 
-    @Gateway(requestChannel = "beautySalonFlow.input", replyChannel = "clientOut")
+    @Gateway(requestChannel = "clientIn", replyChannel = "clientOut")
     Person process(Person person);
 
 

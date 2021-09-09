@@ -1,9 +1,9 @@
-package ru.otus.SpringIntegrationProject.cabinets;
+package ru.otus.SpringIntegrationProject.service;
 
+import org.springframework.stereotype.Service;
 import ru.otus.SpringIntegrationProject.domain.Person;
-import org.springframework.stereotype.Component;
 
-@Component
+@Service
 public class ManicureService {
 
     public Person makeManicure(Person person) {
@@ -16,6 +16,7 @@ public class ManicureService {
     public Person varnishNails(Person person) {
         System.out.println("Varnishing " + person.getName()+ "'s nails");
         System.out.println("Finished "+ person.getName() + "'s manicure");
+        person.setClientDebt(person.getClientDebt()+100);
         return person;
     }
 }
