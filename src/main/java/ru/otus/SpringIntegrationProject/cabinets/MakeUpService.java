@@ -1,6 +1,6 @@
-package cabinets;
+package ru.otus.SpringIntegrationProject.cabinets;
 
-import domain.Person;
+import ru.otus.SpringIntegrationProject.domain.Person;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,6 +1,6 @@
-package app;
+package ru.otus.SpringIntegrationProject;
 
-import domain.Person;
+import ru.otus.SpringIntegrationProject.domain.Person;
 import org.springframework.integration.annotation.Gateway;
 import org.springframework.integration.annotation.MessagingGateway;
 

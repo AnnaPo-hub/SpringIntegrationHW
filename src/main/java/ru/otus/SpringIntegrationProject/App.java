@@ -1,6 +1,6 @@
-package app;
+package ru.otus.SpringIntegrationProject;
 
-import domain.Person;
+import ru.otus.SpringIntegrationProject.domain.Person;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -16,26 +16,9 @@ import org.springframework.integration.dsl.IntegrationFlow;
 @SuppressWarnings({"resource", "Duplicates"})
 @Configuration
 @EnableIntegration
-@ComponentScan("cabinets")
+@ComponentScan("ru/otus/SpringIntegrationProject/cabinets")
 @SpringBootApplication
 public class App {
-    private static final String[] MENU = {"makeUp", "manicure"};
-
-
-//    @Bean
-//    public QueueChannel clientComing(){
-//        return MessageChannels.queue(10).get();
-//    }
-//
-//    @Bean
-//    public PublishSubscribeChannel clientOut(){
-//        return MessageChannels.publishSubscribe().get();
-//    }
-//
-//    @Bean(name = PollerMetadata.DEFAULT_POLLER)
-//    public PollerMetadata poller (){
-//        return Pollers.fixedRate(100).maxMessagesPerPoll(2).get();
-//    }
 
     @Bean
     DirectChannel clientOut() {
@@ -68,23 +51,7 @@ public class App {
 
         ctx.getBean(BeautySalon.class)
                 .process(new Person("Anna", true, true));
-//        MessageChannel inputChannel =  ctx.getBean("clientComing.input",MessageChannel.class);
-//        inputChannel.send(MessageBuilder.withPayload(new Person("Anna", false, false)).build());
         ctx.close();
-
-        //AbstractApplicationContext ctx = new AnnotationConfigApplicationContext( App.class );
-        // ctx.registerShutdownHook();
-
-//         BeautySalon beautySalon = ctx.getBean(BeautySalon.class);
-//         beautySalon.process(new Person("Anna", false, false));
-
-
     }
-
 }
 
-
-//Ultimately, IntegrationFlows will always produce an instance
-// of IntegrationFlow, which is the final product of any Spring Integration app.
-//This pattern of taking input, performing the appropriate transformations, and
-// emitting the results is fundamental to all Spring Integration apps.

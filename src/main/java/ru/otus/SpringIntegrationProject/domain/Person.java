@@ -1,4 +1,4 @@
-package domain;
+package ru.otus.SpringIntegrationProject.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +11,6 @@ import lombok.Setter;
 @Setter
 public class Person {
     private final String name;
-    boolean notManicured = true;
-    boolean withoutMakeUp = true;
+    boolean notManicured;
+    boolean withoutMakeUp;
 }
