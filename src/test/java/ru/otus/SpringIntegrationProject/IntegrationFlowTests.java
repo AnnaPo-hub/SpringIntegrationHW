@@ -37,5 +37,4 @@ public class IntegrationFlowTests {
         Assertions.assertThat(tanya.isNotManicured()).isFalse();
         Assertions.assertThat(tanya.isWithoutMakeUp()).isFalse();
     }
-
 }

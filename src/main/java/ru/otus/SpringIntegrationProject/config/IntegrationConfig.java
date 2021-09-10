@@ -18,12 +18,15 @@ public class IntegrationConfig {
                 .<Person, Boolean>route(Person::isNotManicured,
                         m -> m
                                 //.subFlowMapping(true, processManicure()))
-                                .subFlowMapping(true, sf -> sf.handle("manicureService", "makeManicure")))
+                                .subFlowMapping(true, sf -> sf.handle("manicureService", "makeManicure"))
+                                .subFlowMapping(true, sf -> sf.handle("manicureService", "makeManicure"))
+                                .defaultOutputToParentFlow())
                 //  .subFlowMapping(false, sf -> sf.handle("")))
                 // .channel(this.afterManicureChannel())
                 .<Person, Boolean>route(person -> person.isWithoutMakeUp(),
                         m -> m
-                                .subFlowMapping(true, sf -> sf.handle("makeUpService", "toDoMakeUp")))
+                                .subFlowMapping(true, sf -> sf.handle("makeUpService", "toDoMakeUp"))
+                                .defaultOutputToParentFlow())
                 .handle("payment", "checkClientDebt")
                 .channel(clientOut());
         //  .subFlowMapping(false, sf -> sf.handle("")); ;
@@ -89,9 +92,16 @@ public class IntegrationConfig {
     // @Gateway(replyChannel = "afterManicureChannel")
     public IntegrationFlow processManicure() {
         return flow -> flow
-                .filter(person -> ((Person) person).isNotManicured())
                 .handle("manicureService", "makeManicure")
-                .handle("manicureService", "varnishNails")
-                .channel(afterManicureChannel());
+                .handle("manicureService", "varnishNails");
+        //   .channel(afterManicureChannel());
+    }
+
+    @Bean
+    public IntegrationFlow processMakeUp() {
+        return flow -> flow
+                .handle("makeUpService", "toDoMakeUp");
+
+        //   .channel(afterManicureChannel());
     }
 }
