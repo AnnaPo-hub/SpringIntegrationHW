@@ -14,10 +14,10 @@ import ru.otus.SpringIntegrationProject.domain.Person;
 public class IntegrationConfig {
     Person person;
 
-//    @Bean
-//    public DirectChannel clientIn() {
-//        return new DirectChannel();
-//    }
+    @Bean
+    public DirectChannel clientIn() {
+        return new DirectChannel();
+    }
 
     @Bean
     public DirectChannel clientOut() {
@@ -48,12 +48,13 @@ public class IntegrationConfig {
     }
 
     @Bean
-    public IntegrationFlow clientIn() {
-        return IntegrationFlows.from("clientIn")
+    public IntegrationFlow beautySalonFlow() {
+        return IntegrationFlows.from(clientIn())
                 .gateway(processManicure())
                 .channel(this.afterManicureChannel())
+                .filter(person -> ((Person) person).isWithoutMakeUp())
                 .handle("makeUpService", "toDoMakeUp")
-                .handle("payment", "checkClientDebt")
+               // .handle("payment", "checkClientDebt")
                 .channel(clientOut())
                 .get();
     }
