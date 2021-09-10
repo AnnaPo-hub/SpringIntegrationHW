@@ -1,6 +1,7 @@
 package ru.otus.SpringIntegrationProject;
 
 import org.assertj.core.api.Assertions;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class IntegrationFlowTests {
         Person tanya = beautySalon.process(new Person("Tanya", true, true, 0));
         Assertions.assertThat(tanya.isNotManicured()).isFalse();
         Assertions.assertThat(tanya.isWithoutMakeUp()).isFalse();
-        ///(tanya.getClientDebt()).is("200");
+        Assert.assertEquals(200, tanya.getClientDebt());
     }
 
     @Test

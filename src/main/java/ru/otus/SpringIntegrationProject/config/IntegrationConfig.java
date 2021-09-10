@@ -6,13 +6,38 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.channel.QueueChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
-import org.springframework.integration.dsl.IntegrationFlows;
 import ru.otus.SpringIntegrationProject.domain.Person;
 
 @Configuration
 @RequiredArgsConstructor
 public class IntegrationConfig {
-    Person person;
+
+    @Bean
+    IntegrationFlow process() {
+        return flow -> flow
+                .<Person, Boolean>route(Person::isNotManicured,
+                        m -> m
+                                //.subFlowMapping(true, processManicure()))
+                                .subFlowMapping(true, sf -> sf.handle("manicureService", "makeManicure")))
+                //  .subFlowMapping(false, sf -> sf.handle("")))
+                // .channel(this.afterManicureChannel())
+                .<Person, Boolean>route(person -> person.isWithoutMakeUp(),
+                        m -> m
+                                .subFlowMapping(true, sf -> sf.handle("makeUpService", "toDoMakeUp")))
+                .handle("payment", "checkClientDebt")
+                .channel(clientOut());
+        //  .subFlowMapping(false, sf -> sf.handle("")); ;
+
+
+//                .routeToRecipients(route -> route
+//                .recipient("manicureChannel",
+//                        this::isNotManicured)
+//                        .defaultOutputToParentFlow()
+//                .recipient("makeUpChannel",
+//                        this::isWithoutMakeUp)
+//                        .defaultOutputToParentFlow())
+//                .channel(paymentChannel());
+    }
 
     @Bean
     public DirectChannel clientIn() {
@@ -29,11 +54,12 @@ public class IntegrationConfig {
         return new DirectChannel();
     }
 
-    @Bean
-    QueueChannel makeUpChannel() {
-        return new QueueChannel();
-    }
-
+    //
+//    @Bean
+//    QueueChannel makeUpChannel() {
+//        return new QueueChannel();
+//    }
+//
     @Bean
     QueueChannel paymentChannel() {
         return new QueueChannel();
@@ -46,21 +72,21 @@ public class IntegrationConfig {
     boolean isNotManicured(Person person) {
         return person.isNotManicured();
     }
+//
+//    @Bean
+//    public IntegrationFlow beautySalonFlow() {
+//        return IntegrationFlows.from(clientIn())
+//                .gateway(processManicure())
+//                .channel(this.afterManicureChannel())
+//                .filter(person -> ((Person) person).isWithoutMakeUp())
+//                .handle("makeUpService", "toDoMakeUp")
+//               // .handle("payment", "checkClientDebt")
+//                .channel(clientOut())
+//                .get();
+//    }
 
     @Bean
-    public IntegrationFlow beautySalonFlow() {
-        return IntegrationFlows.from(clientIn())
-                .gateway(processManicure())
-                .channel(this.afterManicureChannel())
-                .filter(person -> ((Person) person).isWithoutMakeUp())
-                .handle("makeUpService", "toDoMakeUp")
-               // .handle("payment", "checkClientDebt")
-                .channel(clientOut())
-                .get();
-    }
-
-    @Bean
-   // @Gateway(replyChannel = "afterManicureChannel")
+    // @Gateway(replyChannel = "afterManicureChannel")
     public IntegrationFlow processManicure() {
         return flow -> flow
                 .filter(person -> ((Person) person).isNotManicured())

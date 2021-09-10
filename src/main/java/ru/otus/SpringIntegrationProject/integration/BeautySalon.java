@@ -7,7 +7,7 @@ import ru.otus.SpringIntegrationProject.domain.Person;
 @MessagingGateway
 public interface BeautySalon {
 
-    @Gateway(requestChannel = "clientIn", replyChannel = "clientOut")
+    @Gateway(requestChannel = "process.input", replyChannel = "clientOut")
     Person process(Person person);
 
 //    @Gateway(requestChannel = "makeUpChannel")
