@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.channel.QueueChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.dsl.IntegrationFlows;
 import ru.otus.SpringIntegrationProject.domain.Person;
 
 @Configuration
@@ -13,33 +14,16 @@ import ru.otus.SpringIntegrationProject.domain.Person;
 public class IntegrationConfig {
 
     @Bean
-    IntegrationFlow process() {
-        return flow -> flow
-                .<Person, Boolean>route(Person::isNotManicured,
-                        m -> m
-                                //.subFlowMapping(true, processManicure()))
-                                .subFlowMapping(true, sf -> sf.handle("manicureService", "makeManicure"))
-                                .subFlowMapping(true, sf -> sf.handle("manicureService", "makeManicure"))
-                                .defaultOutputToParentFlow())
-                //  .subFlowMapping(false, sf -> sf.handle("")))
-                // .channel(this.afterManicureChannel())
-                .<Person, Boolean>route(person -> person.isWithoutMakeUp(),
-                        m -> m
-                                .subFlowMapping(true, sf -> sf.handle("makeUpService", "toDoMakeUp"))
-                                .defaultOutputToParentFlow())
-                .handle("payment", "checkClientDebt")
-                .channel(clientOut());
-        //  .subFlowMapping(false, sf -> sf.handle("")); ;
-
-
-//                .routeToRecipients(route -> route
-//                .recipient("manicureChannel",
-//                        this::isNotManicured)
-//                        .defaultOutputToParentFlow()
-//                .recipient("makeUpChannel",
-//                        this::isWithoutMakeUp)
-//                        .defaultOutputToParentFlow())
-//                .channel(paymentChannel());
+    IntegrationFlow mainFlow() {
+        return IntegrationFlows.from("clientIn")
+                .routeToRecipients(route -> route
+                        .recipientFlow(this::isNotManicured, processManicure())
+                        .recipientFlow(this::isWithoutMakeUp, processMakeUp())
+                        .recipientFlow(processPayment())
+                        .defaultOutputToParentFlow())
+              //  .handle("payment", "checkClientDebt")
+                .channel(clientOut())
+                .get();
     }
 
     @Bean
@@ -57,12 +41,17 @@ public class IntegrationConfig {
         return new DirectChannel();
     }
 
-    //
-//    @Bean
-//    QueueChannel makeUpChannel() {
-//        return new QueueChannel();
-//    }
-//
+
+    @Bean
+    QueueChannel makeUpChannel() {
+        return new QueueChannel();
+    }
+
+    @Bean
+    QueueChannel manicureChannel() {
+        return new QueueChannel();
+    }
+
     @Bean
     QueueChannel paymentChannel() {
         return new QueueChannel();
@@ -89,19 +78,23 @@ public class IntegrationConfig {
 //    }
 
     @Bean
-    // @Gateway(replyChannel = "afterManicureChannel")
     public IntegrationFlow processManicure() {
         return flow -> flow
                 .handle("manicureService", "makeManicure")
-                .handle("manicureService", "varnishNails");
-        //   .channel(afterManicureChannel());
+                .handle("manicureService", "varnishNails")
+                .channel(afterManicureChannel());
     }
 
     @Bean
     public IntegrationFlow processMakeUp() {
         return flow -> flow
                 .handle("makeUpService", "toDoMakeUp");
-
-        //   .channel(afterManicureChannel());
     }
+
+    @Bean
+    public IntegrationFlow processPayment() {
+        return flow -> flow
+                .handle("payment", "checkClientDebt");
+    }
+
 }

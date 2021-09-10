@@ -10,7 +10,7 @@ public class ManicureService {
         System.out.println("Doing manicure for " + person.getName());
         person.setNotManicured(false);
         System.out.println(person.getName() + " got manicured");
-        varnishNails(person);
+      //  varnishNails(person);
         return person;
     }
 
