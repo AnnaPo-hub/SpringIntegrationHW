@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class Person {
     private final String name;
-    boolean notManicured;
-    boolean withoutMakeUp;
-    int clientDebt;
+    private boolean notManicured;
+    private boolean withoutMakeUp;
+    private int clientDebt;
 }

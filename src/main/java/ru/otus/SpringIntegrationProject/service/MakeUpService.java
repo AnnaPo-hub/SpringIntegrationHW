@@ -9,7 +9,7 @@ public class MakeUpService {
         System.out.println("Doing makeup for " + person.getName());
         person.setWithoutMakeUp(false);
         System.out.println(person.getName() + " got makeup");
-        person.setClientDebt(person.getClientDebt()+100);
+        person.setClientDebt(person.getClientDebt() + 100);
         return person;
     }
 }

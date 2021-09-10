@@ -24,7 +24,7 @@ public class IntegrationFlowTests {
     private BeautySalon beautySalon;
 
     @Test
-    public void test() {
+    public void clientShouldPay200() {
         Person tanya = beautySalon.process(new Person("Tanya", true, true, 0));
         Assertions.assertThat(tanya.isNotManicured()).isFalse();
         Assertions.assertThat(tanya.isWithoutMakeUp()).isFalse();
@@ -32,9 +32,18 @@ public class IntegrationFlowTests {
     }
 
     @Test
-    public void test2() {
+    public void clientShouldPay100() {
         Person tanya = beautySalon.process(new Person("Tanya", true, false, 0));
         Assertions.assertThat(tanya.isNotManicured()).isFalse();
         Assertions.assertThat(tanya.isWithoutMakeUp()).isFalse();
+        Assert.assertEquals(100, tanya.getClientDebt());
+    }
+
+    @Test
+    public void clientShouldPayNull() {
+        Person tanya = beautySalon.process(new Person("Tanya", false, false, 0));
+        Assertions.assertThat(tanya.isNotManicured()).isFalse();
+        Assertions.assertThat(tanya.isWithoutMakeUp()).isFalse();
+        Assert.assertEquals(0, tanya.getClientDebt());
     }
 }

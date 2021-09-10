@@ -21,7 +21,7 @@ public class App {
         ConfigurableApplicationContext ctx = SpringApplication.run(App.class, args);
 
         ctx.getBean(BeautySalon.class)
-                .process(new Person("Anna", true, true,0));
+                .process(new Person("Anna", true, true, 0));
         ctx.close();
     }
 }
