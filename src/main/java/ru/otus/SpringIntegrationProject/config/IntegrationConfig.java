@@ -3,7 +3,6 @@ package ru.otus.SpringIntegrationProject.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.integration.annotation.Gateway;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.channel.QueueChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
@@ -60,10 +59,10 @@ public class IntegrationConfig {
     }
 
     @Bean
-    @Gateway(requestChannel = "", replyChannel = "")
+   // @Gateway(replyChannel = "afterManicureChannel")
     public IntegrationFlow processManicure() {
         return flow -> flow
-                .filter((Person)person.isNotManicured())
+                .filter(person -> ((Person) person).isNotManicured())
                 .handle("manicureService", "makeManicure")
                 .handle("manicureService", "varnishNails")
                 .channel(afterManicureChannel());
