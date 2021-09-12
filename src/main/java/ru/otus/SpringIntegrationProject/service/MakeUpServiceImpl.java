@@ -5,6 +5,7 @@ import ru.otus.SpringIntegrationProject.domain.Person;
 
 @Component
 public class MakeUpServiceImpl implements MakeUpService {
+    @Override
     public Person toDoMakeUp(Person person) {
         System.out.println("Doing makeup for " + person.getName());
         person.setWithoutMakeUp(false);

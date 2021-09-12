@@ -5,7 +5,7 @@ import ru.otus.SpringIntegrationProject.domain.Person;
 
 @Component
 public class ManicureServiceImpl implements ManicureService {
-
+    @Override
     public Person makeManicure(Person person) {
         System.out.println("Doing manicure for " + person.getName());
         person.setNotManicured(false);
@@ -13,6 +13,7 @@ public class ManicureServiceImpl implements ManicureService {
         return person;
     }
 
+    @Override
     public void varnishNails(Person person) {
         System.out.println("Varnishing " + person.getName() + "'s nails");
         System.out.println("Finished " + person.getName() + "'s manicure");
